@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,9 +19,16 @@ Route::get('/', function () {
 });
 
 // NOTE: they are ranked in order of preference
-Route::get('/pizzas', 'App\Http\Controllers\PizzaController@index');
+Route::get('/pizzas', 'App\Http\Controllers\PizzaController@index')->middleware('auth');
 Route::get('/pizzas/create', 'App\Http\Controllers\PizzaController@create');
 Route::post('/pizzas', 'App\Http\Controllers\PizzaController@store');
-Route::get('/pizzas/{id}', 'App\Http\Controllers\PizzaController@show'); 
-Route::delete('/pizzas/{id}', 'App\Http\Controllers\PizzaController@destroy');
+Route::get('/pizzas/{id}', 'App\Http\Controllers\PizzaController@show')->middleware('auth'); 
+Route::delete('/pizzas/{id}', 'App\Http\Controllers\PizzaController@destroy')->middleware('auth');
  
+// this creates all the routes like login, register that laravel generated for us
+// register => false deletes the register route...
+Auth::routes([
+    'register' => false
+]);
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
